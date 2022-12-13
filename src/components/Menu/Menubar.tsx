@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css"
 import {
-    AppstoreOutlined,
-    ContainerOutlined,
-    DesktopOutlined,
-    MailOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
-    PieChartOutlined,
 } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
+
 import { Button, Menu } from 'antd';
+import {Link} from "react-router-dom";
+
 
 /*type MenuItem = Required<MenuProps>['items'][number];
 
@@ -62,7 +59,7 @@ const App: React.FC = () => {
 
            <nav className="navbar navbar-light" style={{backgroundColor: "#e3f2fd"}}>
                <div className="container-fluid">
-                   <a className="navbar-brand"><h2>Take-Home-2</h2></a>
+                   <a className="navbar-brand" ><h2><Link to={"/"}>Take-Home-2</Link></h2></a>
                    <form className="d-flex">
                        <input className="form-control me-1" type="search" placeholder="Search" aria-label="Search"/>
                        <button className="btn btn-outline-success" type="submit">Search</button>
@@ -75,12 +72,12 @@ const App: React.FC = () => {
                    {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                </Button>
                <Menu
-                   defaultSelectedKeys={['1']}
                    defaultOpenKeys={['sub1']}
                    mode="inline"
-                   theme="light"
+                   theme="dark"
                    inlineCollapsed={collapsed}>
-                   <Menu.Item key="1">Form</Menu.Item>
+                   <Menu.Item key="1"><Link to={"/FormAgent"}>Add Agent</Link></Menu.Item>
+                   <Menu.Item key="2"><Link to={"/ViewAgent"}>View Agents</Link></Menu.Item>
 
                </Menu>
            </div>

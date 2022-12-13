@@ -3,10 +3,29 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App/App';
 import reportWebVitals from './reportWebVitals';
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import Form from "./components/FormAgent/Form";
+import ViewAgent from "./components/ViewAgent/View";
+import Agents from "./components/Agents/Agents";
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <App/>
+    },
+    {
+        path: "/FormAgent",
+        element: <Form/>
+    },
+    {
+        path: "/ViewAgent",
+        element: <ViewAgent/>
+    }
+])
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router}/>
   </React.StrictMode>,
   document.getElementById('root')
 );

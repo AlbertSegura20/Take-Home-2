@@ -4,9 +4,14 @@ import './Agent.css'
 
 
 const Agent: FC<{ agent: IAgent }> = ({ agent }) => {
+
+  const test = () => {
+    console.log("asaaaa")
+  }
+
   return (
       <>
-    <div className="container">
+    <div className="container" onClick={test}>
       <header>
         <div className="avatar-holder">
           <img src={agent.photoUrl} className="avatar" alt={agent.firstName} />

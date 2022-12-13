@@ -1,0 +1,62 @@
+#form {
+    position: relative;
+    left: 2em;
+    width: 44em;
+    bottom: 8em;
+    /*background-color: white;*/
+}
+
+#title {
+    position: relative;
+    background-color: #00a957;
+    /*background-color: #0677cf;*/
+    height: 4em;
+    text-align: center;
+}
+
+body {
+    background-image: url("../../img/img.jpg");
+    /*height: 10em;*/
+}
+
+#text{
+    position: relative;
+    top: 30px;
+
+}
+
+a:link {
+    text-decoration: none;
+    color: black;
+}
+
+a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+
+.datosFormulario {
+    background-color: white;
+    position: relative;
+    bottom: 7px;
+}
+
+#SaveButtonForm {
+    border: 0;
+    box-shadow: none;
+    border-radius: 0px;
+    background-color: #0677cf;
+    position: relative;
+    left: 17em;
+    bottom: 15px;
+    width: 7em;
+    height: 3em;
+}
+
+#user {
+    height: 1.5em;
+    position: relative;
+    bottom: 16px;
+    right: 4.5em;
+}

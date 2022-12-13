@@ -19,12 +19,13 @@ const Agents: FC = () => {
 
   return (
       <>
+  {/*  <Menubar/>*/}
 
-    {/*<div className="agents">*/}
-    {/*  {agents.map((agent) => (*/}
-    {/*    <Agent key={agent.id} agent={agent} />*/}
-    {/*  ))}*/}
-    {/*</div>*/}
+    <div className="agents">
+      {agents.map((agent) => (
+        <Agent key={agent.id} agent={agent} />
+      ))}
+    </div>
 
       </>
   );
