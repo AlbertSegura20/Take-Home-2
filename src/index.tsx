@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Form from "./components/FormAgent/Form";
 import ViewAgent from "./components/ViewAgent/View";
-import Agents from "./components/Agents/Agents";
+
 
 const router = createBrowserRouter([
     {

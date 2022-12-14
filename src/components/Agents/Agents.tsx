@@ -4,7 +4,7 @@ import Agent from "./Agent";
 import { IAgent } from "../../types/Agent";
 import axios from "axios";
 import './Agents.css'
-import Menubar from "../Menu/Menubar";
+// import Menubar from "../Menu/Menubar";
 
 const Agents: FC = () => {
   const [agents, setAgents] = useState<IAgent[]>([]);
@@ -19,7 +19,6 @@ const Agents: FC = () => {
 
   return (
       <>
-  {/*  <Menubar/>*/}
 
     <div className="agents">
       {agents.map((agent) => (

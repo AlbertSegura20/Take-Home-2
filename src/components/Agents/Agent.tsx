@@ -5,13 +5,13 @@ import './Agent.css'
 
 const Agent: FC<{ agent: IAgent }> = ({ agent }) => {
 
-  const test = () => {
-    console.log("asaaaa")
+  const test = (item:any) => {
+    console.log(item)
   }
 
   return (
       <>
-    <div className="container" onClick={test}>
+    <div className="container" onClick={() => test(agent)}>
       <header>
         <div className="avatar-holder">
           <img src={agent.photoUrl} className="avatar" alt={agent.firstName} />

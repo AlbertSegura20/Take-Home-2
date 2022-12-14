@@ -2,9 +2,11 @@
     position: relative;
     left: 2em;
     width: 44em;
-    bottom: 8em;
-    /*background-color: white;*/
+    bottom: 9em;
+
 }
+
+
 
 #title {
     position: relative;
@@ -36,10 +38,12 @@ a:visited {
 }
 
 
-.datosFormulario {
+.formData {
     background-color: white;
     position: relative;
     bottom: 7px;
+    height: 48em;
+
 }
 
 #SaveButtonForm {
@@ -49,7 +53,7 @@ a:visited {
     background-color: #0677cf;
     position: relative;
     left: 17em;
-    bottom: 15px;
+    top: 9px;
     width: 7em;
     height: 3em;
 }
