@@ -47,7 +47,35 @@ Agent.init(
   }
 );
 
+
+class Reviews extends Sequelize.Model { }
+Reviews.init(
+    {
+        // attributes
+        id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        idAgent: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        review: {
+            type: Sequelize.TEXT,
+            allowNull: false
+        },
+    },
+    {
+        sequelize,
+        modelName: 'Reviews'
+        // options
+    }
+);
+
+
 module.exports = {
   sequelize,
-  Agent
+  Agent,
+  Reviews
 };

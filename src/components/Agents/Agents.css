@@ -2,3 +2,53 @@
   display: flex;
   justify-content: center;
 }
+
+#SaveButtonFormModal {
+  border: 0;
+  box-shadow: none;
+  border-radius: 0px;
+  background-color: #0677cf;
+  position: relative;
+  top: 9px;
+  width: 7em;
+  height: 3em;
+}
+
+#DeleteButtonFormModal{
+  border: 0;
+  box-shadow: none;
+  border-radius: 0px;
+  position: relative;
+  top: 9px;
+  width: 7em;
+  height: 3em;
+}
+
+#CloseButtonFormModal{
+  border: 0;
+  box-shadow: none;
+  border-radius: 0px;
+  position: relative;
+  top: 9px;
+  width: 7em;
+  height: 3em;
+}
+
+#AddReviewButtonFormModal {
+  border: 0;
+  box-shadow: none;
+  border-radius: 0px;
+  position: relative;
+  top: 9px;
+  width: 7em;
+  height: 3em;
+}
+
+.customContainer{
+  white-space: nowrap;
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  max-width: 400px;
+  word-break:break-all;
+}

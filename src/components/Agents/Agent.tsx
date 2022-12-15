@@ -1,17 +1,16 @@
 import type { FC } from "react";
 import { IAgent } from "../../types/Agent";
 import './Agent.css'
+import {useState} from "react";
+
 
 
 const Agent: FC<{ agent: IAgent }> = ({ agent }) => {
 
-  const test = (item:any) => {
-    console.log(item)
-  }
-
   return (
       <>
-    <div className="container" onClick={() => test(agent)}>
+
+    <div className="container">
       <header>
         <div className="avatar-holder">
           <img src={agent.photoUrl} className="avatar" alt={agent.firstName} />

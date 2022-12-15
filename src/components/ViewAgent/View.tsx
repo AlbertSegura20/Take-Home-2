@@ -6,9 +6,10 @@ const View = () => {
 
     return (
         <>
-            <Menubar/>
-            <Agents/>
-                   </>
+            {/*<Menubar/>*/}
+            {/*<Agents/>*/}
+
+        </>
     )
 }
 

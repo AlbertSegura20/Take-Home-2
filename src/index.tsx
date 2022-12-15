@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Form from "./components/FormAgent/Form";
 import ViewAgent from "./components/ViewAgent/View";
+import Agents from "./components/Agents/Agents";
 
 
 const router = createBrowserRouter([
@@ -19,14 +20,13 @@ const router = createBrowserRouter([
     },
     {
         path: "/ViewAgent",
-        element: <ViewAgent/>
+        element: <Agents/>
     }
 ])
 
 ReactDOM.render(
-  <React.StrictMode>
-    <RouterProvider router={router}/>
-  </React.StrictMode>,
+
+    <RouterProvider router={router}/>,
   document.getElementById('root')
 );
 
