@@ -1,9 +1,6 @@
 import type { FC } from "react";
 import { IAgent } from "../../types/Agent";
 import './Agent.css'
-import {useState} from "react";
-
-
 
 const Agent: FC<{ agent: IAgent }> = ({ agent }) => {
 

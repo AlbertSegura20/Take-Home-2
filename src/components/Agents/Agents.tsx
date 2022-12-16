@@ -5,14 +5,30 @@ import axios from "axios";
 import './Agent.css'
 import './Agents.css'
 import Menubar from "../Menu/Menubar";
-import ModalAgent from "../Modal/ModalAgent";
-import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
-import user from "../../img/user.png";
+import UpdateOrDeleteModalAgent from "../Modal/UpdateOrDeleteModalAgent";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
+import AddReviewAgentModal from "../Modal/AddReviewAgentModal";
+// @ts-ignore
+import { ToastContainer } from 'react-toastify/dist/react-toastify.esm';
+import "react-toastify/dist/ReactToastify.css";
+import {
+  deleteAgentNotification_,
+  reviewNotification_, sizeFileNotification_,
+  sizeFileNotificationUndefined_, updateAgentNotification_
+} from "../Notifications/Notifications";
+import AgentCards from "./AgentCards";
+
+
+
 
 
 const Agents: FC = () => {
   const [agents, setAgents] = useState<IAgent[]>([]);
+  const [allAgentsCopy, setAllAgentsCopy] = useState<IAgent[]>([]);
   const [modal, setModal] = useState(false);
+  const [agentModalInfo, setAgentModalInfo] = useState(false);
   const [id, setId] = useState<String>();
   const [firstName, setFirstName] = useState<String>();
   const [lastName, setLastnName] = useState<String>();
@@ -22,13 +38,16 @@ const Agents: FC = () => {
   const [practiceAreas, setPracticeAreas] = useState<String>();
   const [aboutMe, setAboutMe] = useState<String>();
   const [review, setReview] = useState<String>();
-  const [allReviews, setAllReviews] = useState<String[]>()
+  const [allReviews, setAllReviews] = useState<String[]>();
+  const [isSearchBarActived] = useState<boolean>(true);
+  const [search, setSearch] = useState<String>();
+  const [sizeFile, setSizeFile] = useState<any>();
 
   const AgentInfo = async (agent: IAgent) => {
     setId(agent.id);
     setFirstName(agent.firstName);
     setLastnName(agent.lastName);
-    setPhoto("");
+    setPhoto(photo);
     setAgentLicense(agent.agentLicence);
     setAddress(agent.address);
     setPracticeAreas(agent.practiceAreas.toString());
@@ -37,17 +56,40 @@ const Agents: FC = () => {
     await getAllReviews(agent.id);
 
     CloseModal();
-    console.log("AGENTINFO", agent.id);
+
   }
+
+  const AgentInfoUpdateOrDelete = async (agent: IAgent) => {
+    setId(agent.id);
+    setFirstName(agent.firstName);
+    setLastnName(agent.lastName);
+    setPhoto(photo);
+    setAgentLicense(agent.agentLicence);
+    setAddress(agent.address);
+    setPracticeAreas(agent.practiceAreas.toString());
+    setAboutMe(agent.aboutMe);
+
+    await getAllReviews(agent.id);
+
+    CloseAgentModalInfo();
+  }
+
+
 
   const CloseModal = () => {
     setModal(!modal);
   }
 
+  const CloseAgentModalInfo = () => {
+    setAgentModalInfo(!agentModalInfo);
+  }
+
+
   useEffect(() => {
     async function fetchInitialData() {
       const response = await axios.get("/agents");
       setAgents(response.data);
+      setAllAgentsCopy(response.data);
 
     }
     fetchInitialData();
@@ -62,7 +104,6 @@ const Agents: FC = () => {
   const getAllReviews = async (agentId:String) => {
     const allReviews = await axios.get('/reviews', { params: { id: agentId} });
     setAllReviews(allReviews.data);
-    console.log(allReviews.data);
 
   }
 
@@ -77,11 +118,17 @@ const Agents: FC = () => {
         break;
       case "photo":
         const file = target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setPhoto(reader.result?.toString())
+
+        if(file === undefined){
+          sizeFileNotificationUndefined_(true);
+        }else{
+          setSizeFile(file);
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setPhoto(reader.result?.toString())
+          }
+          reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(file);
 
         break;
       case "agentLicense":
@@ -102,14 +149,14 @@ const Agents: FC = () => {
 
   }
 
-  const updateOrDeleteAgentandAddReview = async (e:any) => {
+  const updateOrDeleteAgent = async (e:any) => {
     e.preventDefault();
+
     if(e.target.value === "updateAgent")
       await updateAgentSubmitModal(e)
     if(e.target.value === "deleteAgent")
       await deleteAgentSubmitModal(e)
-    if(e.target.value === "addReview")
-      await addReview(e)
+
   }
 
   const updateAgentSubmitModal = async (e:any) => {
@@ -126,13 +173,19 @@ const Agents: FC = () => {
       aboutMe: aboutMe
     }
 
-    console.log(obj);
+    if(sizeFile === undefined){
+       sizeFileNotificationUndefined_(true);
+    }else{
+      if(sizeFile.size > 75000){
+        sizeFileNotification_(true);
+      }else{
+        const response = await axios.put("/updateAgent", obj);
+        updateAgentNotification_(response.data);
+        setAgentModalInfo(!agentModalInfo);
+        await getAllAgents();
+      }
+    }
 
-
-    const response = await axios.put("/updateAgent", obj);
-    console.log(response);
-    await getAllAgents();
-    setModal(!modal);
   }
 
   const deleteAgentSubmitModal = async(e:any) => {
@@ -144,9 +197,9 @@ const Agents: FC = () => {
     }
 
     const response = await axios.delete("/deleteAgent", {data: obj})
-    console.log(response);
+    deleteAgentNotification_(response.data);
     await getAllAgents();
-    setModal(!modal);
+    setAgentModalInfo(!agentModalInfo);
   }
 
   const addReview = async(e:any) => {
@@ -158,126 +211,67 @@ const Agents: FC = () => {
 
     let agentID: String = obj.id!;
 
-    console.log(obj.id);
-    await axios.post("/addReview", obj);
+    let response = await axios.post("/addReview", obj);
+    reviewNotification_(response.data);
     await getAllReviews(agentID);
+    e.target.reset();
 
   }
 
+  const handleChangeSearch = ({target}:{target:any}) => {
+      setSearch(target.value);
+  }
+
+  const handleSubmitSearch = (e:any) => {
+    e.preventDefault();
+
+    let searchWord = search?.toUpperCase();
+
+    let arraycopy = allAgentsCopy;
+      let result = arraycopy.filter((agent) => {
+        let word = `${agent.firstName} ${agent.lastName} ${agent.agentLicence} ${agent.address} ${agent.practiceAreas}
+                    ${agent.aboutMe} ${agent.id}`.toUpperCase();
+          return word.indexOf(searchWord!) >= 0; });
+
+    setAgents(result);
+
+
+    if(searchWord?.length! === 0){
+      setAgents(allAgentsCopy);
+    }
+
+  }
+
+
   return (
-      <>
-        <Menubar/>
+      <React.Fragment>
 
-        <Modal isOpen={modal} toggle={CloseModal}>
-          <ModalBody>
-            <div>
-              <div>
-                <h3 id={"title"}>
-                  <p id={"text"}>Register Agent</p>
-                  <img src={user} id={"user"} alt={"userIcon"}/>
-                </h3>
-              </div>
+        <Menubar isSearchBarActived={isSearchBarActived} handleChangeSearch={handleChangeSearch} handleSubmitSearch={handleSubmitSearch}/>
 
-              <form onSubmit={updateOrDeleteAgentandAddReview}>
-
-                <div className={"form-floating"}>
-                  <input placeholder={"Add your FirstName"} type={"text"} name={"firstName"} defaultValue={firstName?.toString()} required
-                         onChange={updateChangeAgentModal} className={"form-control"} autoComplete={"off"}/><br/>
-                  <label htmlFor={"firstName"}>First Name</label>
-                </div>
-
-                <div className={"form-floating"}>
-                  <input placeholder={"Add your LastName"} type={"text"} name={"lastName"} defaultValue={lastName?.toString()} required
-                         onChange={updateChangeAgentModal} className={"form-control"} autoComplete={"off"}/><br/>
-                  <label htmlFor={"lastName"}>Last Name</label>
-                </div>
-
-                <div className={"form-floating"}>
-                  <input type={"file"} name={"photo"}  placeholder={"Add your Photo"} multiple accept={"image/*"}
-                         onChange={updateChangeAgentModal} className={"form-control"} autoComplete={"off"}/><br/>
-                  <label htmlFor={"photoUrl"} >Photo</label>
-                </div>
+        <AddReviewAgentModal modal={modal} CloseModal={CloseModal} addReview={addReview}
+                             updateChangeAgentModal={updateChangeAgentModal} firstName={firstName!} lastName={lastName!}
+                             agentLicense={agentLicense!} address={address!} practiceAreas={practiceAreas!}
+                             aboutMe={aboutMe!} allReviews={allReviews!}/>
 
 
-                <div className={"form-floating"}>
-                  <input placeholder={"Add your License"} type={"text"} name={"agentLicense"} defaultValue={agentLicense?.toString()} required
-                         onChange={updateChangeAgentModal} className={"form-control"} autoComplete={"off"}/><br/>
-                  <label htmlFor={"agentLicense"} >Agent License</label>
-                </div>
 
-                <div className={"form-floating"}>
-                  <input placeholder={"Add your Address"} type={"text"} name={"address"} defaultValue={address?.toString()} required
-                         onChange={updateChangeAgentModal}  className={"form-control"} autoComplete={"off"}/><br/>
-                  <label htmlFor={"Address"} >Address</label>
-                </div>
+        <UpdateOrDeleteModalAgent agentModalInfo={agentModalInfo} CloseAgentModalInfo={CloseAgentModalInfo} updateOrDeleteAgent={updateOrDeleteAgent}
+                                  updateChangeAgentModal={updateChangeAgentModal} firstName={firstName!} lastName={lastName!}
+                                  agentLicense={agentLicense!} address={address!} practiceAreas={practiceAreas!}
+                                  aboutMe={aboutMe!} allReviews={allReviews!}/>
 
-                <div className={"form-floating"}>
-                  <input placeholder={"Add your PracticeAreas"} type={"text"} name={"practiceAreas"} defaultValue={practiceAreas?.toString()} required
-                         onChange={updateChangeAgentModal}  className={"form-control"} autoComplete={"off"}/><br/>
-                  <label htmlFor={"practiceAreas"} >Practice Areas</label>
-                </div>
-
-                <label>About me</label>
-                <textarea rows={4} name={"aboutMe"} defaultValue={aboutMe?.toString()}
-                          onChange={updateChangeAgentModal}   className='form-control'
-                          placeholder='Add information about yourself' /><br/>
-
-
-                <div className={"form-floating"}>
-                  <input placeholder={"Add your Review"} type={"text"} name={"review"} required
-                         onChange={updateChangeAgentModal}  className={"form-control"} autoComplete={"off"}/><br/><br/>
-                  <label htmlFor={"practiceAreas"} >Review</label>
-                </div>
-
-                <h4>Reviews</h4>
-                {allReviews?.map((items:any) => <li key={items.id}>{items.review.toString()}</li>)}
-
-                <ModalFooter>
-                  <Button className="btn btn-success" id={"AddReviewButtonFormModal"} value={"addReview"} onClick={updateOrDeleteAgentandAddReview} type={"submit"}>Add Review</Button>
-                  <Button className="btn btn-primary" id={"SaveButtonFormModal"} value={"updateAgent"} onClick={updateOrDeleteAgentandAddReview} type={"submit"}>Update</Button>
-                  <Button className="btn btn-danger" id={"DeleteButtonFormModal"} value={"deleteAgent"} onClick={updateOrDeleteAgentandAddReview} type={"submit"}>Delete</Button>
-                  <Button className="btn btn-dark" id={"CloseButtonFormModal"} onClick={CloseModal}>Close</Button>
-                </ModalFooter>
-
-              </form>
-
-
-            </div>
-
-          </ModalBody>
-
-        </Modal>
-
+        <ToastContainer theme={"colored"} />
 
       {agents.map((agent) => (
 
-          <div className="container" onClick={() => AgentInfo(agent)} key={agent.id}>
-            <header>
-              <div className="avatar-holder">
-                <img src={agent.photoUrl} className="avatar" alt={agent.firstName} />
-              </div>
-              <h2 className="agent-name">{agent.firstName + " " + agent.lastName}</h2>
-            </header>
-            <div className="customContainer">{agent.aboutMe}</div>
-            <footer>
-              <div className="full-width-flex-box">
-                <div className="one-third-flex-box">
-                  <span>{agent.address}</span>
-                </div>
-                <div className="one-third-flex-box">
-                  <span>Areas of Practice: {agent.practiceAreas}</span>
-                </div>
-                <div className="one-third-flex-box">
-                  <span>Review: asdsaddsadsaasd</span>
-                </div>
-              </div>
-            </footer>
-          </div>
+          <AgentCards agent={agent} key={agent.id} AgentInfo={AgentInfo} AgentInfoUpdateOrDelete={AgentInfoUpdateOrDelete}/>
+
 
       ))}
-      
 
-      </>
+
+
+      </React.Fragment>
   );
 };
 

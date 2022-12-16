@@ -8,6 +8,8 @@
   text-align: center;
   width: 359px;
   margin-bottom: 112px;
+  position: relative;
+  left: 10em;
 }
 
 
@@ -102,13 +104,5 @@ footer .stat {
 }
 
 
-#Test{
-  font-family: museo-slab, sans-serif;
-  font-style: normal;
-  /*font-weight: 900;*/
-  /*line-height: 56px;*/
-  text-align: center;
-  color: #ffffff;
-  /*margin-bottom: 4px;*/
-}
+
 

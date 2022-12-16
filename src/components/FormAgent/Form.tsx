@@ -3,6 +3,15 @@ import Menubar from "../Menu/Menubar";
 import "./Form.css";
 import axios from "axios";
 import FormUI from "./FormUI";
+// @ts-ignore
+import { ToastContainer } from 'react-toastify/dist/react-toastify.esm';
+import "react-toastify/dist/ReactToastify.css";
+
+import {
+    newAgentNotification_,
+    sizeFileNotification_,
+    sizeFileNotificationUndefined_
+} from "../Notifications/Notifications";
 
 const Form: FC = () => {
 
@@ -13,7 +22,8 @@ const Form: FC = () => {
     const [address, setAddress] = useState<String>();
     const [practiceAreas, setPracticeAreas] = useState<String>();
     const [aboutMe, setAboutMe] = useState<String>();
-    const [review, setReview] = useState<String>();
+    const [isSearchBarActived] = useState<boolean>(false);
+    const [sizeFile, setSizeFile] = useState<any>();
 
     const handleChange = ({target} : {target:any}) => {
 
@@ -27,18 +37,16 @@ const Form: FC = () => {
             case "photo":
                 const file = target.files[0];
 
-                // console.log(file.size);
-                // if(file.size > 74600){
-                //     alert("Imagen muy grande")
-                //     target.reset();
-                // }else{
+                if(file === undefined){
+                    sizeFileNotificationUndefined_(true);
+                }else{
+                    setSizeFile(file);
                     const reader = new FileReader();
                     reader.onloadend = () => {
                         setPhoto(reader.result?.toString())
                     }
                     reader.readAsDataURL(file);
-
-                // }
+                }
                 break;
             case "agentLicense":
                 setAgentLicense(target.value);
@@ -69,15 +77,91 @@ const Form: FC = () => {
             aboutMe: aboutMe
         }
 
-        await axios.post("/newAgent", obj)
+        if(sizeFile === undefined){
+            // sizeFileNotificationUndefined(true);
+            sizeFileNotificationUndefined_(true)
+        }else{
+            if(sizeFile.size > 75000){
+                // sizeFileNotification(true);
+                sizeFileNotification_(true);
+            }else{
+                const response = await axios.post("/newAgent", obj)
+                // newAgentNotification(response.data);
+                newAgentNotification_(response.data);
+                e.target.reset();
+            }
+        }
 
     }
 
 
+    // const sizeFileNotification = (typeNotification:any) => {
+    //
+    //     switch (typeNotification) {
+    //         case true:
+    //             return toast.error("Image very big, please search another image", {
+    //                 position: "top-right",
+    //                 autoClose: 5000,
+    //                 hideProgressBar: false,
+    //                 closeOnClick: true,
+    //                 pauseOnHover: true,
+    //                 draggable: true,
+    //                 progress: undefined,
+    //             })
+    //     }
+    // }
+    //
+    // const sizeFileNotificationUndefined = (typeNotification:any) => {
+    //
+    //     switch (typeNotification) {
+    //         case true:
+    //             return toast.error("Please choose an image", {
+    //                 position: "top-right",
+    //                 autoClose: 5000,
+    //                 hideProgressBar: false,
+    //                 closeOnClick: true,
+    //                 pauseOnHover: true,
+    //                 draggable: true,
+    //                 progress: undefined,
+    //             })
+    //     }
+    // }
+    //
+    //
+    //
+    // const newAgentNotification = (typeNotification:any) => {
+    //
+    //     switch (typeNotification.message) {
+    //         case true:
+    //             return toast.success("New Agent Saved", {
+    //                 position: "top-right",
+    //                 autoClose: 5000,
+    //                 hideProgressBar: false,
+    //                 closeOnClick: true,
+    //                 pauseOnHover: true,
+    //                 draggable: true,
+    //                 progress: undefined,
+    //             })
+    //         case false:
+    //             return toast.error("New Agent Error", {
+    //                 position: "top-right",
+    //                 autoClose: 5000,
+    //                 hideProgressBar: false,
+    //                 closeOnClick: true,
+    //                 pauseOnHover: true,
+    //                 draggable: true,
+    //                 progress: undefined,
+    //             })
+    //
+    //     }
+    // }
+
+
+
     return (
         <>
-            <Menubar/>
-
+            <Menubar isSearchBarActived={isSearchBarActived} handleSubmitSearch={() => ""} handleChangeSearch={() => ""}/>
+            <ToastContainer theme={"colored"}/>
             <FormUI handleChange={handleChange} handleSubmit={handleSubmit}/>
 
         </>

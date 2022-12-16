@@ -52,3 +52,32 @@
   max-width: 400px;
   word-break:break-all;
 }
+
+
+.dropdown {
+  width: 5%;
+  position: relative;
+  left:23.2em;
+  height: 0;
+}
+
+.customContainer_{
+
+}
+
+.btn{
+  outline: none;
+  border: none;
+}
+
+.btn:focus {
+  outline: none;
+  border: none;
+}
+
+
+.dropdown-item:focus {
+  background: #D1A0FF;
+}
+
+

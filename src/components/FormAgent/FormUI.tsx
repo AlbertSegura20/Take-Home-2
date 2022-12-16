@@ -1,4 +1,4 @@
-import React, {ChangeEvent, ChangeEventHandler, FormEvent, FormEventHandler} from "react";
+import React, {ChangeEventHandler, FormEventHandler} from "react";
 import user from "../../img/user.png";
 
 
@@ -11,7 +11,7 @@ const FormUI = ({handleChange, handleSubmit} : {handleChange:ChangeEventHandler,
             <div>
                 <h3 id={"title"}>
                     <p id={"text"}>Register Agent</p>
-                    <img src={user} id={"user"} alt={"userIcon"}/>
+                    <img src={user} id={"userAgent"} alt={"userIcon"}/>
                 </h3>
             </div>
 
