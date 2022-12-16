@@ -230,7 +230,7 @@ const Agents: FC = () => {
     let arraycopy = allAgentsCopy;
       let result = arraycopy.filter((agent) => {
         let word = `${agent.firstName} ${agent.lastName} ${agent.agentLicence} ${agent.address} ${agent.practiceAreas}
-                    ${agent.aboutMe} ${agent.id}`.toUpperCase();
+                    ${agent.aboutMe}`.toUpperCase();
           return word.indexOf(searchWord!) >= 0; });
 
     setAgents(result);
