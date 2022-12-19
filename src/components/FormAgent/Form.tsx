@@ -78,84 +78,18 @@ const Form: FC = () => {
         }
 
         if(sizeFile === undefined){
-            // sizeFileNotificationUndefined(true);
             sizeFileNotificationUndefined_(true)
         }else{
             if(sizeFile.size > 75000){
-                // sizeFileNotification(true);
                 sizeFileNotification_(true);
             }else{
                 const response = await axios.post("/newAgent", obj)
-                // newAgentNotification(response.data);
                 newAgentNotification_(response.data);
                 e.target.reset();
             }
         }
 
     }
-
-
-    // const sizeFileNotification = (typeNotification:any) => {
-    //
-    //     switch (typeNotification) {
-    //         case true:
-    //             return toast.error("Image very big, please search another image", {
-    //                 position: "top-right",
-    //                 autoClose: 5000,
-    //                 hideProgressBar: false,
-    //                 closeOnClick: true,
-    //                 pauseOnHover: true,
-    //                 draggable: true,
-    //                 progress: undefined,
-    //             })
-    //     }
-    // }
-    //
-    // const sizeFileNotificationUndefined = (typeNotification:any) => {
-    //
-    //     switch (typeNotification) {
-    //         case true:
-    //             return toast.error("Please choose an image", {
-    //                 position: "top-right",
-    //                 autoClose: 5000,
-    //                 hideProgressBar: false,
-    //                 closeOnClick: true,
-    //                 pauseOnHover: true,
-    //                 draggable: true,
-    //                 progress: undefined,
-    //             })
-    //     }
-    // }
-    //
-    //
-    //
-    // const newAgentNotification = (typeNotification:any) => {
-    //
-    //     switch (typeNotification.message) {
-    //         case true:
-    //             return toast.success("New Agent Saved", {
-    //                 position: "top-right",
-    //                 autoClose: 5000,
-    //                 hideProgressBar: false,
-    //                 closeOnClick: true,
-    //                 pauseOnHover: true,
-    //                 draggable: true,
-    //                 progress: undefined,
-    //             })
-    //         case false:
-    //             return toast.error("New Agent Error", {
-    //                 position: "top-right",
-    //                 autoClose: 5000,
-    //                 hideProgressBar: false,
-    //                 closeOnClick: true,
-    //                 pauseOnHover: true,
-    //                 draggable: true,
-    //                 progress: undefined,
-    //             })
-    //
-    //     }
-    // }
-
 
 
     return (
